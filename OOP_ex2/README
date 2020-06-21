@@ -1,0 +1,95 @@
+matans
+
+
+
+=============================
+=      File description     =
+=============================
+In this jar, there are 6 spaceships that ready to play with. it has (in briefly:
+1. HumanSpaceShip class- is the spaceship that the user can play with against other spaceships. It can be
+controlled by specific keyboard's keys.
+2. AggressiveSpaceShip - The aggressive spaceship always tries to shoot the closet spaceship and follow it.
+3. BasherSpaceShip- It always tries to collide with the closet ship and chase it.
+4. RunnerSpaceShip- This spaceship tries to avoid the fight. It runs from the closet spaceship and can
+teleport if it feel thrilled.
+
+5. DrunkSpaceShip- It has a drunk pilot that does not remember the target of the game.
+The drunk ship is navigates and teleport randomly. It shield is on and off every several rounds. It is shoot
+when the distance is less than 0.25 units and the angle between it and the other spaceships is more than 0.1
+or less than -0.1 (not in the sight).
+
+6. SpecialSpaceShip- Patrick is angry in the space. He is shooting the closet spaceship that too close to him.
+It rarely moves and turn around to shoot the closet spaceship.
+
+ Another file is SpaceShipFactory that reads with what spaceships the game will play with according to the
+ args that the user decide to input.
+
+ And SpaceShip that it is the father class of all the spaceships. This file contain general information and
+ methods for all spaceships. It has the rules of all the spaceships.
+
+=============================
+=          Design           =
+=============================
+I hesitated a lot about the design and decide to do it like that:
+
+                                        SpaceShip
+                                            |
+                              ______________|______________
+                             |                             |
+                             |                             |
+                           Runner                        Human
+                             |
+          ___________________|____________________
+         |             |            |             |
+         |             |            |             |
+       Drunk       Aggressive     Basher       Special
+
+The SpaceShip class is the head of the tree because it is include in it most of the general information for
+all the spaceship. The main method over there is doAction that checks about the main method in other
+spaceships that inheritor from this class; checks about the shield if ot turn on or of; And check if there is
+enough energy to some action and if the energy subject is legal.
+
+Then, There are two classes: Human and Runner. I'll start with Human. Human class over ride the
+specificClassAction method (which is extend for doAction method but with another details for Human class).
+It is checks the keys for the user to play, change the gif for different from enemy.
+It is override the shieldOn method that in general is for enemy spaceships because of the images.
+
+Runner class is the father of the other enemy spaceships. The main method adds and check for information and
+direct the code to another specific method for the runner spaceship that the other spaceships are override.
+
+The other spaceships are override the actionOtherShips method and execute the specific method for the
+spaceship. In every of those class it has another method for committing it own role in the game according to
+it attributes.
+
+=============================
+=  Implementation details   =
+=============================
+I thought about unique design because I wanted to try to use the classes and how the inheritance in java
+works. So of course the main class is the SpaceShip because it has most of the common information for all the
+spaceships in the game. Human class has it own attributes because the user need to controlled it, so I put it
+"alone". The other class has a lot in common. The specificClassAction that override in Spaceships is
+calculates things that other spaceships needs such as; distance from the closet ship and the angle between two
+spaceships. The runner class include that method and every other (enemy spaceShips) are using that method and
+it information. That method calls to another one that every other spaceships below runner is override
+because that method is more specific to the class.
+I thought the way of my design is separate between the human and the enemies. Although the desicion of
+choosing the runner class to be the father of all the other enemy spaceships is not important, I just want to
+add more code for the enemy and makes it more settled.
+
+I think it other users can easily add more different spaceships because it can extend the runner class that
+including the Spaceship (all the basic information for all classes) and the details of other spaceships in the
+ board. Only need to override the actionOtherShips method for it own attribute.
+
+I tried to write the code modular as much as I can. I think that every action has it own method.
+It is possible to adds more methods and attributes for the spaceships and add it to the main method in
+every class the relative to the addAction. The API was difficult to do minimal because most of the method I
+wrote is override by other classes. I put the not override method in private in order to do the API smaller as
+ I can.
+
+I tried to learn fast how to use the classes and most of all learned a lot. The option to decide what class
+inherent from other class and use it methods automatically expand my thoughts about writing a code. It can
+makes things easier and more readable.
+
+
+:)
+

@@ -1,0 +1,133 @@
+matans
+
+
+
+=============================
+=      File description     =
+=============================
+In this exercise I build two implementation of a hashSet data structure.
+
+=============================
+=          Design           = Q 1 & 2
+=============================
+--- OpenHashSet's table implementation:
+I implemented open hashSet with the use of the Collection Facade Set class. The idea was to use this facade
+class to implement the linked list that has in every cell of the openHashSet's array.
+Every time the class ask for add value, it first check what will happen to the load factor when adding a
+value. Then it resize and rehash if necessary (it can only make a bigger array when the load factor is above
+the upperLoadFactor. Then it is add the value in the right place (according to the clamp method in
+SimpleHashSet class). When it is add, its ask if the cell is null, if it is null it should add a new
+collection facade set from class linked list. This was easy to use because I just open a new linked list when
+I use the facade. The extend CollectionFacadeSet has an array of this subclass where each such facade
+wraps a LinkedList<String>.
+
+When the class ask to remove a value from the array, it also check first fi the value in the array. Then if it
+ is in the array it is search the cell that contain it, then it called to the collection method to remove that
+  value. Then it is check the load factor and resize and rehash if necessary.
+
+--- CloseHashSet's table implementation:
+I implemented close hashSet with the implementations methods. It is almost similar to the open hash set but
+with no linked lists.
+
+When it ask to add an item, it is check if the item contain in the array and then check about the load factor
+and resize and rehash if necessary.
+When open hash set search for value it is clamp the index and search in a specific cell. However, the close
+hash set check while add probing quarter (i + i * i )/2.
+Close hash set implement a set- which means no double values. If the index that the clamp return is not null
+it should be String or an Object. While String is a different value that the close hash set contain
+(Without defining generality it can be the value it search) or some object. When it open a close hash set its
+open an object array. I thought about something that can solve the probing problem, because what if it tried
+insert a value1 and the probing first said the first index is busy and the next probing the cell is null BUT
+THEN it ask to delete the first item. And what if we ask to insert again the value1. The first probing is now
+null and it can insert the value, but value1 already in the array. That's way I use deleted value option. When
+ it delete a value from the array, it change it to an object. That's how it knows to keep probing if nessesary
+
+ I ask not to expand the API. I notice that some method in those classes are similar and can be merged to a
+ general one such like :
+ *datHelper- that extract the data from the constructor and add it to the array.
+ *All the load factor calculator. It is just take the size and the capacity and it can be in simple hash set
+ too.
+ *Add method generally use the same actions and call to the same method but inside those methods things are
+ different.
+
+ I chose the expand the API in the facade class because I had to find a solution for an iterator to run on all
+  the linked list I used in the open hash set. And toString method that allows the analyzer print the type of
+  the array it implemented.
+
+*** Analyzer
+I build the analyzer class like a test class but not. This class can run any of the test that the exercise ask
+ to. You can run any test alone or together. I tried to build it that way the if you want to run contain's
+ test it is first check if you already add all the values that need to be added to the array before it is
+ start the contain method. If it already add to the array the data (when the user choose test 1 or to) it is
+ use that array and not add to a new array the data. In that way, it saves time to the user.
+
+
+=============================
+=    Answers to questions   =
+=============================
+OpenHashSet bad result for data1:
+The bad result for openHashCode is the add. The data1 contains a list of 99,999 different words with the same
+hash. I expected that it would take a long time (when I compare the openHashCode to add data2).
+OpenHashCode can add values without take care if the cell is "busy". It is add to the cell according to it
+hashCode. In every cell it has LinkedList. I know that to check if value is exist in the array take O(n) in
+linked list. So when it add data1, which include values with the same hashCode, it will have less busy cell as
+ it should has and the linked lists will be long, which mean that the running time will be slower when compare
+  it adding data that including different hashCode.
+  This is explain why in test 3, when checking if the word "hi" contain in this array, it takes very short
+  time. Because "hi" has a different hashCode what means that the index it will check if contain will be
+  almost empty - all the different values (data1) in the same linkedList.
+  The opposite test for this is the big negative string that has the same hashCode like the data in data1.
+  That's way this test will take much longer because it has the same hashCode like the data in data1.
+
+CloseHashSet bad result for data1:
+The results is pretty similar in closeHashSet but from different cause.
+It took more time to add data1 because when adding data with the same hashCode when it try to add it it checks
+ if the value already in the array. To check that it should jump over the array (according to the probing
+ hash). It will take a lot of time because it has the same hashCode.
+Test3 with tried to check if the word "hi" is contain in the array. Because it has a different hashCode it
+will check in different indexes because the different hashCode.
+And the big negative string with the same hashCode, that's way it took so long. It is very similar to the add
+because it should check if the value are exist too and because of the probing the the same hashCode it will
+has to do a lot of jumps until it will get null (empty string) which means that the while loop can stop.
+
+
+Scale for 1 to 5: 1 is very good, and 5 is the worst.
+                                    OpenHashSet     CloseHashSet      TreeSet     LinkedList      HashSet
+
+Adding data with same hash code         5                 4              1            3              2
+1
+Check data with same hashCode           4                 5              2            3              1
+like the data in the array with
+the same hashCode.    4
+
+Adding data with different hash         3                 2              2            5              1
+code 2
+
+Check value with different hashCode     1                 1              2            5              1
+with same hashCode data. 3
+
+Check value that does exist in          1                 2              3            4              2
+different hashCode data   5
+
+Check value that doesn't exist          1                 2              3            5              1
+in different hashCode data    6
+
+The answer in which I should prefer is depend on the data. I noticed that hashSet will do everything great.
+For openHashSet the adding is not has the best running time, but when it check if a value contains it has good
+ performance. I wonder how did they build it because I tried to think how can my code can be more efficient,
+ but when I saw it I was surprising because it has great results and seems like the best data structure java
+ has to offer.
+ However, I win't even consider use linked list because of it big running time for every task.
+ In addition to the table, closeHashSet not has great running time in compare to the others structures.
+
+
+
+
+
+
+
+
+
+
+
+
